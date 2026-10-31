@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>Compteur Taxi</title>
+  <meta name="description" content="Taximètre GPS : prise en charge, distance et temps d'attente.">
+  <meta name="theme-color" content="#0b0d10">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Taxi">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <div class="badge" id="etat">LIBRE</div>
+      <div class="badge nuit" id="badgeNuit" hidden>NUIT</div>
+      <button class="icone" id="btnReglages" aria-label="Réglages">⚙︎</button>
+    </header>
+
+    <section class="ecran" aria-live="polite">
+      <div class="prix"><span id="total">0.00</span><span class="devise" id="devise">DH</span></div>
+      <div class="mode" id="mode">Appuyez sur Démarrer</div>
+    </section>
+
+    <section class="stats">
+      <div><span class="lbl">Distance</span><span class="val" id="distance">0.00 km</span></div>
+      <div><span class="lbl">Attente</span><span class="val" id="attente">0:00</span></div>
+      <div><span class="lbl">Durée</span><span class="val" id="duree">0:00</span></div>
+      <div><span class="lbl">Vitesse</span><span class="val" id="vitesse">0 km/h</span></div>
+    </section>
+
+    <section class="detail" id="detail">
+      <div><span>Prise en charge</span><span id="dPec">0.00</span></div>
+      <div><span>Distance</span><span id="dDist">0.00</span></div>
+      <div><span>Attente</span><span id="dAtt">0.00</span></div>
+    </section>
+
+    <div class="gps" id="gps">GPS : en attente</div>
+
+    <section class="actions">
+      <button class="btn principal" id="btnStart">Démarrer</button>
+      <button class="btn" id="btnPause" hidden>Pause</button>
+      <button class="btn danger" id="btnStop" hidden>Terminer</button>
+      <button class="btn" id="btnReset" hidden>Nouvelle course</button>
+    </section>
+
+    <p class="aide" id="aideInstall" hidden></p>
+  </main>
+
+  <dialog id="reglages">
+    <form method="dialog" id="formReglages">
+      <h2>Tarifs</h2>
+      <label>Prix du début (prise en charge)<input name="priseEnCharge" type="number" step="0.01" min="0" inputmode="decimal"></label>
+      <label>Prix par kilomètre<input name="prixKm" type="number" step="0.01" min="0" inputmode="decimal"></label>
+      <label>Prix par minute d'attente<input name="prixMinute" type="number" step="0.01" min="0" inputmode="decimal"></label>
+      <label>Vitesse en dessous de laquelle on compte l'attente (km/h)<input name="vitesseSeuil" type="number" step="1" min="1" inputmode="numeric"></label>
+      <label>Course minimum (0 = aucune)<input name="minimum" type="number" step="0.01" min="0" inputmode="decimal"></label>
+      <label>Devise<input name="devise" type="text" maxlength="5"></label>
+      <h2>Tarif de nuit</h2>
+      <label class="ligne"><input name="nuitAuto" type="checkbox"> Activer automatiquement la nuit</label>
+      <label>Majoration de nuit (%)<input name="majorationNuit" type="number" step="1" min="0" inputmode="numeric"></label>
+      <div class="deux">
+        <label>Début (heure)<input name="heureDebutNuit" type="number" min="0" max="23" inputmode="numeric"></label>
+        <label>Fin (heure)<input name="heureFinNuit" type="number" min="0" max="23" inputmode="numeric"></label>
+      </div>
+      <p class="note">Les nouveaux tarifs s'appliquent à la prochaine course.</p>
+      <div class="actions-dlg">
+        <button value="annuler" class="btn">Annuler</button>
+        <button value="ok" class="btn principal" id="btnSave">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

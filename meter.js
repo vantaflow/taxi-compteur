@@ -1,0 +1,118 @@
+// Logique pure du taximètre (sans DOM), testable avec Node.
+// Règle d'un vrai compteur : au-dessus de la vitesse seuil, on paie la distance ;
+// en dessous (arrêt, feu rouge, bouchon), on paie le temps d'attente.
+
+export const DEFAULT_TARIFS = {
+  priseEnCharge: 7.5,   // prix affiché au démarrage
+  prixKm: 2.5,          // par kilomètre parcouru
+  prixMinute: 0.5,      // par minute d'attente (à l'arrêt ou en dessous du seuil)
+  vitesseSeuil: 10,     // km/h : en dessous, on facture le temps
+  minimum: 0,           // course minimum (0 = aucun)
+  majorationNuit: 50,   // % appliqué entre heureDebutNuit et heureFinNuit
+  heureDebutNuit: 20,
+  heureFinNuit: 6,
+  nuitAuto: true,
+  devise: 'DH',
+};
+
+const R = 6371000; // rayon de la Terre en mètres
+
+export function distanceMetres(a, b) {
+  const rad = (d) => (d * Math.PI) / 180;
+  const dLat = rad(b.lat - a.lat);
+  const dLon = rad(b.lon - a.lon);
+  const h = Math.sin(dLat / 2) ** 2 +
+    Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+export function estNuit(date, t) {
+  const h = date.getHours();
+  const { heureDebutNuit: d, heureFinNuit: f } = t;
+  if (d === f) return false;
+  return d < f ? h >= d && h < f : h >= d || h < f;
+}
+
+export function nouvelleCourse(t, maintenant = Date.now()) {
+  return {
+    etat: 'en_course',      // 'en_course' | 'pause' | 'terminee'
+    debut: maintenant,
+    distance: 0,            // mètres facturés
+    attente: 0,             // secondes facturées en attente
+    duree: 0,               // secondes totales en course
+    enMouvement: false,
+    vitesse: 0,             // km/h
+    dernierPoint: null,     // {lat, lon, t, acc}
+    dernierTick: maintenant,
+    nuit: t.nuitAuto ? estNuit(new Date(maintenant), t) : false,
+    fin: null,
+  };
+}
+
+// Avance l'horloge : le temps passé sous la vitesse seuil est facturé.
+// Si aucune position GPS récente (> 8 s), on considère le taxi à l'arrêt.
+export function tick(c, t, maintenant = Date.now()) {
+  if (c.etat !== 'en_course') { c.dernierTick = maintenant; return c; }
+  const dt = Math.max(0, (maintenant - c.dernierTick) / 1000);
+  c.dernierTick = maintenant;
+  c.duree += dt;
+  const gpsPerimé = !c.dernierPoint || maintenant - c.dernierPoint.t > 8000;
+  if (gpsPerimé) { c.enMouvement = false; c.vitesse = 0; }
+  if (!c.enMouvement) c.attente += dt;
+  return c;
+}
+
+// Intègre une nouvelle position GPS.
+export function position(c, t, p) {
+  // p = {lat, lon, acc (m), t (ms), speed (m/s ou null)}
+  if (c.etat !== 'en_course') { c.dernierPoint = null; return c; }
+  if (p.acc > 50) return c; // trop imprécis : ignoré
+  const prec = c.dernierPoint;
+  if (!prec) { c.dernierPoint = p; return c; }
+  const d = distanceMetres(prec, p);
+  const dt = (p.t - prec.t) / 1000;
+  if (dt <= 0) return c;
+  const vitesseCalc = (d / dt) * 3.6;
+  const vitesse = p.speed != null && p.speed >= 0 ? p.speed * 3.6 : vitesseCalc;
+  // Filtre anti-dérive : à l'arrêt, le GPS « bouge » de quelques mètres.
+  const bruit = Math.max(4, (prec.acc + p.acc) / 3);
+  if (vitesseCalc > 200) return c; // saut aberrant
+  c.vitesse = vitesse;
+  c.enMouvement = vitesse >= t.vitesseSeuil;
+  if (d >= bruit) {
+    if (c.enMouvement) c.distance += d;
+    c.dernierPoint = p;
+  } else {
+    c.dernierPoint = { ...prec, t: p.t };
+  }
+  return c;
+}
+
+export function detail(c, t) {
+  const coef = c.nuit ? 1 + t.majorationNuit / 100 : 1;
+  const distancePart = (c.distance / 1000) * t.prixKm * coef;
+  const attentePart = (c.attente / 60) * t.prixMinute * coef;
+  const brut = t.priseEnCharge + distancePart + attentePart;
+  const total = Math.max(brut, t.minimum || 0);
+  return { priseEnCharge: t.priseEnCharge, distancePart, attentePart, coef, total };
+}
+
+export function pause(c, maintenant = Date.now()) {
+  if (c.etat === 'en_course') { c.etat = 'pause'; c.dernierPoint = null; c.enMouvement = false; c.vitesse = 0; }
+  c.dernierTick = maintenant;
+  return c;
+}
+
+export function reprendre(c, maintenant = Date.now()) {
+  if (c.etat === 'pause') c.etat = 'en_course';
+  c.dernierTick = maintenant;
+  return c;
+}
+
+export function terminer(c, maintenant = Date.now()) {
+  c.etat = 'terminee';
+  c.fin = maintenant;
+  c.enMouvement = false;
+  c.vitesse = 0;
+  return c;
+}

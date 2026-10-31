@@ -1,0 +1,74 @@
+:root {
+  --bg: #0b0d10;
+  --panel: #15181d;
+  --ligne: #262b33;
+  --texte: #e8eaed;
+  --doux: #8a93a0;
+  --jaune: #ffcc00;
+  --vert: #3ddc84;
+  --rouge: #ff5a5a;
+  --bleu: #6aa8ff;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--texte);
+  font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif; }
+body { overscroll-behavior: none; }
+.app { min-height: 100%; max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px;
+  padding: calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 16px); }
+
+.top { display: flex; align-items: center; gap: 8px; }
+.badge { font-weight: 700; font-size: 13px; letter-spacing: .08em; padding: 6px 12px; border-radius: 999px;
+  background: var(--panel); border: 1px solid var(--ligne); color: var(--doux); }
+.badge.course { color: #111; background: var(--vert); border-color: var(--vert); }
+.badge.pause { color: #111; background: var(--jaune); border-color: var(--jaune); }
+.badge.fin { color: #fff; background: var(--rouge); border-color: var(--rouge); }
+.badge.nuit { color: var(--bleu); border-color: var(--bleu); }
+.icone { margin-left: auto; background: none; border: 0; color: var(--doux); font-size: 26px; padding: 4px 8px; }
+
+.ecran { background: #000; border: 1px solid var(--ligne); border-radius: 18px; padding: 22px 16px 16px; text-align: center; }
+.prix { font-family: ui-monospace, "SF Mono", Menlo, monospace; color: var(--jaune); font-weight: 700;
+  font-size: clamp(56px, 19vw, 96px); line-height: 1; font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 18px rgba(255, 204, 0, .35); }
+.devise { font-size: .32em; margin-left: 8px; color: var(--doux); text-shadow: none; }
+.mode { margin-top: 10px; color: var(--doux); font-size: 15px; min-height: 1.3em; }
+.mode.roule { color: var(--vert); }
+.mode.arret { color: var(--jaune); }
+
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stats > div { background: var(--panel); border: 1px solid var(--ligne); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 4px; }
+.lbl { font-size: 12px; color: var(--doux); text-transform: uppercase; letter-spacing: .06em; }
+.val { font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.detail { background: var(--panel); border: 1px solid var(--ligne); border-radius: 14px; padding: 6px 14px; }
+.detail > div { display: flex; justify-content: space-between; padding: 7px 0; font-variant-numeric: tabular-nums; }
+.detail > div + div { border-top: 1px solid var(--ligne); }
+.detail span:first-child { color: var(--doux); }
+
+.gps { font-size: 13px; color: var(--doux); text-align: center; }
+.gps.ok { color: var(--vert); }
+.gps.ko { color: var(--rouge); }
+
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }
+.actions .btn:only-child, .actions .principal { grid-column: span 2; }
+.actions:has(#btnPause:not([hidden])) .principal { grid-column: auto; }
+.btn { font: inherit; font-size: 18px; font-weight: 700; padding: 18px 12px; border-radius: 14px;
+  border: 1px solid var(--ligne); background: var(--panel); color: var(--texte); }
+.btn:active { transform: scale(.98); }
+.btn.principal { background: var(--jaune); color: #111; border-color: var(--jaune); }
+.btn.danger { background: var(--rouge); color: #fff; border-color: var(--rouge); }
+[hidden] { display: none !important; }
+.aide { font-size: 13px; color: var(--doux); text-align: center; margin: 0; }
+
+dialog { width: min(520px, calc(100% - 24px)); max-height: 90vh; border: 1px solid var(--ligne); border-radius: 18px;
+  background: var(--panel); color: var(--texte); padding: 18px; }
+dialog::backdrop { background: rgba(0, 0, 0, .7); }
+dialog h2 { font-size: 16px; margin: 6px 0 10px; color: var(--jaune); }
+dialog label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--doux); margin-bottom: 12px; }
+dialog label.ligne { flex-direction: row; align-items: center; color: var(--texte); }
+dialog input[type=number], dialog input[type=text] { font: inherit; font-size: 18px; padding: 10px 12px; border-radius: 10px;
+  border: 1px solid var(--ligne); background: var(--bg); color: var(--texte); }
+dialog input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--jaune); }
+.deux { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.note { font-size: 13px; color: var(--doux); }
+.actions-dlg { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
