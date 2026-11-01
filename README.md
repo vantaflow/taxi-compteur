@@ -45,13 +45,15 @@ L'appli marche à la verticale comme à l'horizontale (support de voiture) :
 
 ![Affichage à l'horizontale](docs/captures/horizontal.png)
 
-### Trois styles d'affichage
+### Trois styles d'affichage et la couleur du taxi
 
 Bouton palette en haut à droite, changeable à tout moment, même pendant une course :
 
 - **Néon nuit** : sombre, chiffres lumineux façon compteur, barre de répartition début / distance / attente.
-- **Jaune taxi** : fond jaune, énorme prix noir, très lisible en plein soleil.
+- **Couleur taxi** : fond à la couleur du taxi, énorme prix, bande à damier ; très lisible en plein soleil.
 - **Épuré clair** : prix dans un anneau qui fait un tour par minute d'attente (ou par kilomètre en roulant).
+
+**Couleur du taxi** : au Maroc, chaque ville a la sienne ; aux États-Unis, les taxis sont jaunes. Dans la même fenêtre, on choisit la couleur dominante de l'appli : couleurs prêtes (jaune New York, rouge Casablanca et Fès, bleu Rabat, beige Marrakech, orange Agadir, turquoise Tanger, bleu ciel Meknès, vert) ou **n'importe quelle autre couleur**. Elle colore le fond en « Couleur taxi », les chiffres et l'anneau dans les autres styles, et le bandeau du reçu. Le texte passe automatiquement en noir ou en blanc, et la couleur est éclaircie ou assombrie si besoin, pour rester lisible.
 
 ## Comment le prix est calculé
 
@@ -130,6 +132,7 @@ app.js                interface : rendu, boutons, GPS, réglages, historique, re
 meter.js              logique du compteur (pure, sans DOM) : distance, attente, coupures GPS, suppléments
 donnees.js            stockage local : tarifs enregistrés, suppléments, historique, totaux, export CSV
 recu.js               reçu en texte et en image (canvas)
+couleur.js            couleur du taxi : palette et variantes lisibles (chargé avant l'affichage)
 sw.js                 service worker : cache de tous les fichiers pour l'usage hors ligne
 manifest.webmanifest  installation (nom, icônes, plein écran)
 fonts/                polices embarquées (licence SIL OFL)
@@ -153,7 +156,7 @@ Le GPS des navigateurs n'est disponible qu'en HTTPS ou sur `localhost`. Pour tes
 npm test
 ```
 
-Node 18 ou plus récent, sans rien installer. Les tests couvrent le calcul (arrêt, roulage, pause, coupures GPS, suppléments, minimum), les tarifs enregistrés et la reprise de l'ancien réglage, l'historique et ses totaux, l'export CSV et le texte du reçu.
+Node 18 ou plus récent, sans rien installer. Les tests couvrent le calcul (arrêt, roulage, pause, coupures GPS, suppléments, minimum), les tarifs enregistrés et la reprise de l'ancien réglage, l'historique et ses totaux, l'export CSV, le texte du reçu et la lisibilité de toutes les couleurs.
 
 ### Publier une modification
 
@@ -162,7 +165,7 @@ Le site est servi par **GitHub Pages** depuis la branche `main` (racine du dép�
 À chaque modification de fichiers servis, pour que les téléphones prennent la nouvelle version :
 
 1. incrémenter `CACHE` dans `sw.js` (`taxi-vN`) ;
-2. incrémenter le paramètre `?v=N` de `style.css` et `app.js` dans `index.html` ;
+2. incrémenter le paramètre `?v=N` de `couleur.js`, `style.css` et `app.js` dans `index.html` ;
 3. ajouter tout nouveau fichier à la liste `FICHIERS` de `sw.js`, sinon il ne sera pas disponible hors ligne.
 
 ### Données stockées (localStorage)
@@ -174,6 +177,7 @@ Le site est servi par **GitHub Pages** depuis la branche `main` (racine du dép�
 | `taxi.recu` | nom, numéro de taxi, téléphone du reçu |
 | `taxi.historique` | courses terminées (5 000 au plus, la plus récente en premier) |
 | `taxi.course` | course en cours, pour la reprendre après fermeture de l'appli |
-| `taxi.style`, `taxi.aide` | style d'affichage, aide des réglages affichée ou non |
+| `taxi.style`, `taxi.couleur` | style d'affichage et couleur du taxi (`#rrggbb`, absente = couleur d'origine) |
+| `taxi.aide` | aide des réglages affichée ou non |
 
 L'ancienne clé `taxi.tarifs` (tarif unique des premières versions) est reprise automatiquement comme tarif « Ville ».

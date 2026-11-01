@@ -51,7 +51,7 @@ export function texteRecu(r, infos) {
 }
 
 // Image du reçu, façon ticket imprimé : fond blanc, texte noir.
-export function canvasRecu(r, infos, doc = document) {
+export function canvasRecu(r, infos, doc = document, couleur = '#ffcc00') {
   const c = contenuRecu(r, infos);
   const L = 600, M = 40, echelle = 2;
   const police = (taille, gras = false) => `${gras ? 800 : 500} ${taille}px Manrope, system-ui, sans-serif`;
@@ -61,7 +61,7 @@ export function canvasRecu(r, infos, doc = document) {
   const g = cv.getContext('2d');
   g.scale(echelle, echelle);
   g.fillStyle = '#ffffff'; g.fillRect(0, 0, L, H);
-  g.fillStyle = '#ffcc00'; g.fillRect(0, 0, L, 10);
+  g.fillStyle = couleur; g.fillRect(0, 0, L, 10); // bandeau à la couleur du taxi
   g.fillStyle = '#111111'; g.textBaseline = 'alphabetic';
   let y = 64;
   const centre = (txt, taille, gras) => { g.font = police(taille, gras); g.textAlign = 'center'; g.fillText(txt, L / 2, y); };

@@ -244,7 +244,7 @@ const dlgRecu = $('recu');
 let recuOuvert = null; // { rec, cv }
 async function ouvrirRecu(rec, depuisHistorique) {
   try { await Promise.all([document.fonts.load('800 20px Manrope'), document.fonts.load('500 20px Manrope')]); } catch { /* police système */ }
-  const cv = canvasRecu(rec, infosRecu);
+  const cv = canvasRecu(rec, infosRecu, document, couleurCourante());
   recuOuvert = { rec, cv };
   $('imgRecu').src = cv.toDataURL('image/png');
   $('btnSupprCourse').hidden = !depuisHistorique;
@@ -329,15 +329,40 @@ $('btnViderHist').onclick = () => {
 };
 
 // ================= Style d'affichage =================
-const COULEUR_BARRE = { neon: '#07090c', jaune: '#ffcc00', epure: '#f6f6f3' };
+const COULEUR_BARRE = { neon: '#07090c', jaune: null, epure: '#f6f6f3' };
+const couleurCourante = () => getComputedStyle(document.documentElement).getPropertyValue('--c').trim() || '#ffcc00';
 function appliquerStyle(s) {
   document.documentElement.dataset.style = s;
-  document.querySelector('meta[name="theme-color"]').content = COULEUR_BARRE[s] || '#07090c';
+  // Barre d'état du téléphone : couleur du fond (celle du taxi en « Couleur taxi »).
+  document.querySelector('meta[name="theme-color"]').content = COULEUR_BARRE[s] || couleurCourante();
   document.querySelectorAll('.carte-style').forEach((b) => b.setAttribute('aria-pressed', String(b.value === s)));
 }
+
+// ---- Couleur du taxi ----
+const TC = window.TaxiCouleur;
+function choisirCouleur(hex) {
+  TC.enregistrer(hex); TC.appliquer(hex);
+  appliquerStyle(document.documentElement.dataset.style || 'neon');
+  marquerCouleur(); rendu();
+}
+function marquerCouleur() {
+  const actuelle = TC.lire();
+  document.querySelectorAll('.pastille').forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.hex || null) === actuelle)));
+  $('couleurPerso').value = actuelle || couleurCourante();
+}
+$('couleurs').replaceChildren(...TC.PALETTE.map((p) => {
+  const rond = el('span', { className: 'rond' + (p.hex ? '' : ' origine') });
+  if (p.hex) rond.style.background = p.hex;
+  const b = el('button', { type: 'button', className: 'pastille' }, rond, el('span', { textContent: p.nom }));
+  if (p.hex) b.dataset.hex = p.hex;
+  b.onclick = () => choisirCouleur(p.hex);
+  return b;
+}));
+$('couleurPerso').addEventListener('input', (e) => choisirCouleur(e.target.value.toLowerCase()));
+marquerCouleur();
 appliquerStyle(document.documentElement.dataset.style || 'neon');
 const dlgStyles = $('styles');
-$('btnTheme').onclick = () => dlgStyles.showModal();
+$('btnTheme').onclick = () => { marquerCouleur(); dlgStyles.showModal(); };
 dlgStyles.addEventListener('close', () => {
   const s = dlgStyles.returnValue;
   if (!COULEUR_BARRE[s]) return;

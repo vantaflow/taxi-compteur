@@ -2,5 +2,5 @@
   "name": "taxi-compteur",
   "private": true,
   "type": "module",
-  "scripts": { "test": "node --test test/meter.test.mjs test/donnees.test.mjs" }
+  "scripts": { "test": "node --test test/meter.test.mjs test/donnees.test.mjs test/couleur.test.mjs" }
 }

@@ -1,6 +1,6 @@
-const CACHE = 'taxi-v12';
+const CACHE = 'taxi-v14';
 // Tout ce qu'il faut pour fonctionner sans internet, polices comprises.
-const FICHIERS = ['./', 'index.html', 'style.css', 'app.js', 'meter.js', 'donnees.js', 'recu.js', 'manifest.webmanifest',
+const FICHIERS = ['./', 'index.html', 'style.css', 'app.js', 'meter.js', 'donnees.js', 'recu.js', 'couleur.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
   'fonts/archivo-400-latin-ext.woff2','fonts/archivo-400-latin.woff2','fonts/archivo-black-400-latin-ext.woff2','fonts/archivo-black-400-latin.woff2','fonts/chakra-petch-500-latin-ext.woff2','fonts/chakra-petch-500-latin.woff2','fonts/chakra-petch-600-latin-ext.woff2','fonts/chakra-petch-600-latin.woff2','fonts/chakra-petch-700-latin-ext.woff2','fonts/chakra-petch-700-latin.woff2','fonts/fonts.css','fonts/manrope-500-latin-ext.woff2','fonts/manrope-500-latin.woff2','fonts/share-tech-mono-400-latin.woff2'];
 
