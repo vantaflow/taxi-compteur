@@ -1,4 +1,4 @@
-import { DEFAULT_TARIFS, nouvelleCourse, tick, position, detail, pause, reprendre, terminer } from './meter.js';
+import { attenteTotale, DEFAULT_TARIFS, nouvelleCourse, tick, position, detail, pause, reprendre, terminer } from './meter.js';
 
 const $ = (id) => document.getElementById(id);
 const CLE_TARIFS = 'taxi.tarifs';
@@ -43,10 +43,10 @@ function rendu() {
     const d = detail(course, t);
     $('total').textContent = fmt(d.total);
     $('distance').textContent = `${(course.distance / 1000).toFixed(2)} km`;
-    $('attente').textContent = fmtTemps(course.attente);
+    $('attente').textContent = fmtTemps(attenteTotale(course));
     $('duree').textContent = fmtTemps(course.duree);
     $('vitesse').textContent = `${Math.round(course.vitesse)} km/h`;
-    lignesDetail(t, d, course.distance, course.attente);
+    lignesDetail(t, d, course.distance, attenteTotale(course));
     $('badgeNuit').hidden = !course.nuit;
     const mode = $('mode');
     if (course.etat === 'en_course') {
@@ -131,6 +131,27 @@ $('btnStop').onclick = () => {
 };
 $('btnReset').onclick = () => { course = null; tarifsCourse = tarifs; sauver(); rendu(); };
 
+// Thème : Auto (suit le téléphone) → Clair → Sombre
+const THEMES = [null, 'light', 'dark'];
+const NOMS_THEME = { null: 'Thème automatique', light: 'Thème clair', dark: 'Thème sombre' };
+function appliquerTheme(th) {
+  if (th) document.documentElement.dataset.theme = th; else delete document.documentElement.dataset.theme;
+  const clair = th === 'light' || (!th && matchMedia('(prefers-color-scheme: light)').matches);
+  document.querySelector('meta[name="theme-color"]').content = clair ? '#f2f3f5' : '#0b0d10';
+  $('btnTheme').textContent = th === 'light' ? '☀︎' : th === 'dark' ? '☾' : '◐';
+  $('btnTheme').title = NOMS_THEME[th];
+}
+let theme = document.documentElement.dataset.theme || null;
+appliquerTheme(theme);
+matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => appliquerTheme(theme));
+$('btnTheme').onclick = () => {
+  theme = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
+  try { theme ? localStorage.setItem('taxi.theme', theme) : localStorage.removeItem('taxi.theme'); } catch { /* indisponible */ }
+  appliquerTheme(theme);
+  gpsMsg = { ...gpsMsg }; const g = $('gps'), ancien = g.textContent;
+  g.textContent = NOMS_THEME[theme]; setTimeout(() => { if (g.textContent === NOMS_THEME[theme]) g.textContent = ancien; }, 1500);
+};
+
 // Réglages
 const dlg = $('reglages'), form = $('formReglages');
 $('btnReglages').onclick = () => {
@@ -165,7 +186,7 @@ document.addEventListener('visibilitychange', () => {
 });
 
 // Reprise après fermeture ou rechargement de l'appli
-if (course?.etat === 'en_course') { course.dernierPoint = null; demarrerGps(); garderEcran(); }
+if (course?.etat === 'en_course') { demarrerGps(); garderEcran(); }
 
 // Aide à l'installation
 const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;

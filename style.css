@@ -8,7 +8,27 @@
   --vert: #3ddc84;
   --rouge: #ff5a5a;
   --bleu: #6aa8ff;
+  --ecran-bg: #000;
+  --prix: #ffcc00;
+  --prix-glow: 0 0 18px rgba(255, 204, 0, .35);
+  --devise: #8a93a0;
+  --sur-jaune: #111;
   color-scheme: dark;
+}
+/* Thème clair : écran du prix jaune taxi, chiffres noirs (lisible en plein soleil) */
+:root[data-theme="light"] {
+  --bg: #f2f3f5; --panel: #ffffff; --ligne: #dcdfe4; --texte: #14171c; --doux: #5d6672;
+  --vert: #138a4a; --rouge: #d93030; --bleu: #2563c9; --jaune: #e6b800;
+  --ecran-bg: #ffcc00; --prix: #111; --prix-glow: none; --devise: rgba(0, 0, 0, .6);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg: #f2f3f5; --panel: #ffffff; --ligne: #dcdfe4; --texte: #14171c; --doux: #5d6672;
+    --vert: #138a4a; --rouge: #d93030; --bleu: #2563c9; --jaune: #e6b800;
+    --ecran-bg: #ffcc00; --prix: #111; --prix-glow: none; --devise: rgba(0, 0, 0, .6);
+    color-scheme: light;
+  }
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--texte);
@@ -24,14 +44,15 @@ body { overscroll-behavior: none; }
 .badge.pause { color: #111; background: var(--jaune); border-color: var(--jaune); }
 .badge.fin { color: #fff; background: var(--rouge); border-color: var(--rouge); }
 .badge.nuit { color: var(--bleu); border-color: var(--bleu); }
-.icone { margin-left: auto; background: none; border: 0; color: var(--doux); font-size: 26px; padding: 4px 8px; }
+.icone { background: none; border: 0; color: var(--doux); font-size: 24px; padding: 4px 8px; }
+.icone.droite { margin-left: auto; background: none; border: 0; color: var(--doux); font-size: 26px; padding: 4px 8px; }
 
-.ecran { background: #000; border: 1px solid var(--ligne); border-radius: 18px; padding: 22px 16px 16px; text-align: center; }
-.prix { font-family: ui-monospace, "SF Mono", Menlo, monospace; color: var(--jaune); font-weight: 700;
+.ecran { background: var(--ecran-bg); border: 1px solid var(--ligne); border-radius: 18px; padding: 22px 16px 16px; text-align: center; }
+.prix { font-family: ui-monospace, "SF Mono", Menlo, monospace; color: var(--prix); font-weight: 700;
   font-size: clamp(56px, 19vw, 96px); line-height: 1; font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 18px rgba(255, 204, 0, .35); }
-.devise { font-size: .32em; margin-left: 8px; color: var(--doux); text-shadow: none; }
-.mode { margin-top: 10px; color: var(--doux); font-size: 15px; min-height: 1.3em; }
+  text-shadow: var(--prix-glow); }
+.devise { font-size: .32em; margin-left: 8px; color: var(--devise); text-shadow: none; }
+.mode { margin-top: 10px; color: var(--devise); font-size: 15px; min-height: 1.3em; }
 .mode.roule { color: var(--vert); }
 .mode.arret { color: var(--jaune); }
 
@@ -50,7 +71,7 @@ body { overscroll-behavior: none; }
 .gps.ko { color: var(--rouge); }
 
 .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }
-.actions .btn:only-child, .actions .principal { grid-column: span 2; }
+.actions .btn:only-child, .actions .principal, #btnReset { grid-column: span 2; }
 .actions:has(#btnPause:not([hidden])) .principal { grid-column: auto; }
 .btn { font: inherit; font-size: 18px; font-weight: 700; padding: 18px 12px; border-radius: 14px;
   border: 1px solid var(--ligne); background: var(--panel); color: var(--texte); }
@@ -94,3 +115,9 @@ dialog input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--jau
 .deux { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .note { font-size: 13px; color: var(--doux); }
 .actions-dlg { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Sur l'écran jaune du thème clair, les états restent lisibles */
+:root[data-theme="light"] .ecran .mode.roule, :root[data-theme="light"] .ecran .mode.arret { color: #111; font-weight: 600; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .ecran .mode.roule, :root:not([data-theme]) .ecran .mode.arret { color: #111; font-weight: 600; }
+}
