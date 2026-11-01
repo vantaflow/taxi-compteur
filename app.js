@@ -369,7 +369,7 @@ const dlgStyles = $('styles');
 $('btnTheme').onclick = () => { marquerCouleur(); dlgStyles.showModal(); };
 dlgStyles.addEventListener('close', () => {
   const s = dlgStyles.returnValue;
-  if (!COULEUR_BARRE[s]) return;
+  if (!Object.hasOwn(COULEUR_BARRE, s)) return;
   try { localStorage.setItem('taxi.style', s); localStorage.removeItem('taxi.theme'); } catch { /* indisponible */ }
   appliquerStyle(s); rendu();
 });
