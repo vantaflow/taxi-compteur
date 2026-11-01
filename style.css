@@ -61,7 +61,7 @@ body { overscroll-behavior: none; }
 .aide { font-size: 13px; color: var(--doux); text-align: center; margin: 0; }
 
 /* Écran à l'horizontal (support de voiture) : prix à gauche, détails et boutons à droite */
-@media (orientation: landscape) and (max-height: 600px) {
+@media (min-aspect-ratio: 6/5) {
   .app { max-width: none; height: 100%; display: grid; gap: 10px 14px;
     grid-template-columns: 1.15fr 1fr;
     grid-template-rows: auto 1fr auto auto;
