@@ -350,13 +350,17 @@ function marquerCouleur() {
   document.querySelectorAll('.pastille').forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.hex || null) === actuelle)));
   $('couleurPerso').value = actuelle || couleurCourante();
 }
-$('couleurs').replaceChildren(...TC.PALETTE.map((p) => {
+// Pastilles groupées : d'origine, puis Maroc, puis Monde.
+let groupePrec = null;
+$('couleurs').replaceChildren(...TC.PALETTE.flatMap((p) => {
   const rond = el('span', { className: 'rond' + (p.hex ? '' : ' origine') });
   if (p.hex) rond.style.background = p.hex;
   const b = el('button', { type: 'button', className: 'pastille' }, rond, el('span', { textContent: p.nom }));
   if (p.hex) b.dataset.hex = p.hex;
   b.onclick = () => choisirCouleur(p.hex);
-  return b;
+  const titre = p.groupe && p.groupe !== groupePrec ? el('h3', { className: 'groupe-couleurs', textContent: p.groupe }) : null;
+  groupePrec = p.groupe;
+  return titre ? [titre, b] : [b];
 }));
 $('couleurPerso').addEventListener('input', (e) => choisirCouleur(e.target.value.toLowerCase()));
 marquerCouleur();

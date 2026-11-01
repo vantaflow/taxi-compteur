@@ -33,3 +33,13 @@ test('seules les couleurs #rrggbb sont acceptées', () => {
   assert.equal(TC.valide('#fff'), false);
   assert.equal(TC.valide(null), false);
 });
+
+test('taxi noir : damier blanc et boutons éclaircis sur le panneau noir', () => {
+  const v = TC.variantes('#1b1b1d');
+  assert.equal(v['--c-damier'], '#ffffff');
+  assert.ok(TC.contraste(v['--c-btn'], '#111111') >= 3);
+  assert.ok(TC.contraste(v['--c-btn'], v['--c-btn-sur']) >= 4.5);
+  const j = TC.variantes('#ffcc00');
+  assert.equal(j['--c-damier'], '#111111');
+  assert.equal(j['--c-btn'], '#ffcc00');
+});

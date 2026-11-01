@@ -12,6 +12,7 @@
 }
 :root[data-style="jaune"] {
   --c: #ffcc00; --c-sur: #111111; --c-vif: #ffcc00; --c-fonce: #7a5c00;
+  --c-damier: #111111; --c-btn: var(--c); --c-btn-sur: var(--c-sur);
   --bg: var(--c); --texte: var(--c-sur); --doux: color-mix(in srgb, var(--c-sur) 72%, var(--c)); --panel: #ffffff; --ligne: color-mix(in srgb, var(--c-sur) 18%, var(--c));
   --accent: var(--c); --sur-accent: var(--c-sur); --ok: #0f7a3d; --danger: #c62828; --bleu: #1d4ed8;
   --police: 'Archivo', system-ui, sans-serif;
@@ -127,7 +128,7 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 :root[data-style="jaune"] .mode { display: inline-flex; margin-top: 14px; padding: 8px 14px; border-radius: 12px; background: var(--c-sur); color: var(--c); font-weight: 600; }
 :root[data-style="jaune"] .mode:empty { display: none; }
 :root[data-style="jaune"] .damier { display: block; height: 22px; margin: 0 -16px;
-  background-image: repeating-linear-gradient(90deg, #111 0 22px, transparent 22px 44px), repeating-linear-gradient(90deg, transparent 0 22px, #111 22px 44px);
+  background-image: repeating-linear-gradient(90deg, var(--c-damier) 0 22px, transparent 22px 44px), repeating-linear-gradient(90deg, transparent 0 22px, var(--c-damier) 22px 44px);
   background-color: var(--c);
   background-size: 100% 11px, 100% 11px; background-position: 0 0, 0 11px; background-repeat: no-repeat; }
 :root[data-style="jaune"] .panneau { --texte: #f5f2e8; --doux: #b9b4a4; --ligne: #2c2c2c; --panel: transparent; --ok: #4ef08f; --danger: #ff6b6b;
@@ -290,3 +291,5 @@ dialog select { font: inherit; font-size: 17px; height: 46px; padding: 0 10px; b
 .autre-couleur { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; font-size: 14px; color: var(--texte); }
 .autre-couleur input[type=color] { width: 56px; height: 40px; padding: 0; border: 1px solid var(--ligne); border-radius: 10px; background: none; }
 #styles h2 + .choix { margin-bottom: 18px; }
+.groupe-couleurs { grid-column: 1 / -1; margin: 10px 0 0; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--doux); }
+:root[data-style="jaune"] .panneau .btn.principal, :root[data-style="jaune"] .panneau .btn.fin { background: var(--c-btn); color: var(--c-btn-sur); border-color: var(--c-btn); }
