@@ -167,6 +167,10 @@ dlgStyles.addEventListener('close', () => {
 
 // Réglages
 const dlg = $('reglages'), form = $('formReglages');
+// Toucher à côté d'une fenêtre la ferme sans rien changer.
+for (const d of document.querySelectorAll('dialog')) {
+  d.addEventListener('click', (e) => { if (e.target === d) d.close(''); });
+}
 $('btnReglages').onclick = () => {
   for (const [k, v] of Object.entries(tarifs)) {
     const el = form.elements[k]; if (!el) continue;

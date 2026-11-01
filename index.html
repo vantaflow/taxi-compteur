@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=Chakra+Petch:wght@500;600;700&family=Manrope:wght@500;600;700;800&family=Share+Tech+Mono&display=swap">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
   <main class="app">
@@ -101,7 +101,12 @@
   </dialog>
 
   <dialog id="reglages">
-    <form method="dialog" id="formReglages">
+    <form method="dialog" id="formReglages" class="dlg">
+      <div class="dlg-tete">
+        <h2>Réglages</h2>
+        <button value="annuler" class="icone" aria-label="Fermer sans enregistrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      </div>
+      <div class="dlg-corps">
       <h2>Tarifs</h2>
       <label>Prix du début (prise en charge)<input name="priseEnCharge" type="number" step="0.01" min="0" inputmode="decimal"></label>
       <label>Prix par kilomètre<input name="prixKm" type="number" step="0.01" min="0" inputmode="decimal"></label>
@@ -117,13 +122,14 @@
         <label>Fin (heure)<input name="heureFinNuit" type="number" min="0" max="23" inputmode="numeric"></label>
       </div>
       <p class="note">Les nouveaux tarifs s'appliquent à la prochaine course.</p>
-      <div class="actions-dlg">
+      </div>
+      <div class="actions-dlg dlg-pied">
         <button value="annuler" class="btn">Annuler</button>
         <button value="ok" class="btn principal" id="btnSave">Enregistrer</button>
       </div>
     </form>
   </dialog>
 
-  <script type="module" src="app.js?v=6"></script>
+  <script type="module" src="app.js?v=7"></script>
 </body>
 </html>

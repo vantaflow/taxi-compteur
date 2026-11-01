@@ -1,4 +1,4 @@
-const CACHE = 'taxi-v6';
+const CACHE = 'taxi-v7';
 const FICHIERS = ['./', 'index.html', 'style.css', 'app.js', 'meter.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'];
 

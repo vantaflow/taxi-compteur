@@ -183,8 +183,16 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 }
 
 /* ===== Fenêtres (réglages, choix du style) ===== */
-dialog { width: min(520px, calc(100% - 24px)); max-height: 90vh; border: 1px solid var(--ligne); border-radius: 20px;
-  background: var(--panel); color: var(--texte); padding: 18px; }
+dialog { width: min(520px, calc(100% - 24px)); max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
+  border: 1px solid var(--ligne); border-radius: 20px; background: var(--panel); color: var(--texte); padding: 18px; overflow: auto; }
+/* Réglages : en-tête et boutons toujours visibles, seuls les champs défilent */
+dialog#reglages { padding: 0; overflow: hidden; }
+dialog#reglages[open] { display: flex; flex-direction: column; }
+.dlg { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.dlg-tete { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 12px 8px 18px; border-bottom: 1px solid var(--ligne); }
+.dlg-tete h2 { margin: 0; font-size: 18px; }
+.dlg-corps { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 8px 18px 4px; }
+.dlg-pied { padding: 12px 18px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--ligne); background: inherit; }
 :root[data-style="jaune"] dialog { background: #fff; color: #111; }
 dialog::backdrop { background: rgba(0, 0, 0, .6); }
 dialog h2 { font-size: 16px; margin: 6px 0 12px; }
