@@ -36,7 +36,7 @@ function rendu() {
     etat.textContent = 'LIBRE'; etat.className = 'badge';
     $('mode').textContent = 'Appuyez sur Démarrer'; $('mode').className = 'mode';
     for (const id of ['distance', 'attente', 'duree', 'vitesse']) $(id).textContent = id === 'distance' ? '0.00 km' : id === 'vitesse' ? '0 km/h' : '0:00';
-    $('dPec').textContent = fmt(tarifs.priseEnCharge); $('dDist').textContent = fmt(0); $('dAtt').textContent = fmt(0);
+    lignesDetail(tarifs, { priseEnCharge: tarifs.priseEnCharge, distancePart: 0, attentePart: 0, coef: 1 }, 0, 0);
     $('badgeNuit').hidden = true;
     boutons('libre');
   } else {
@@ -46,9 +46,7 @@ function rendu() {
     $('attente').textContent = fmtTemps(course.attente);
     $('duree').textContent = fmtTemps(course.duree);
     $('vitesse').textContent = `${Math.round(course.vitesse)} km/h`;
-    $('dPec').textContent = fmt(d.priseEnCharge);
-    $('dDist').textContent = fmt(d.distancePart);
-    $('dAtt').textContent = fmt(d.attentePart);
+    lignesDetail(t, d, course.distance, course.attente);
     $('badgeNuit').hidden = !course.nuit;
     const mode = $('mode');
     if (course.etat === 'en_course') {
@@ -65,6 +63,17 @@ function rendu() {
     boutons(course.etat);
   }
   const g = $('gps'); g.textContent = gpsMsg.txt; g.className = `gps ${gpsMsg.cls}`;
+}
+
+// Détail du prix : chaque ligne montre sa base (km, temps) et son montant en devise.
+function lignesDetail(t, d, distanceM, attenteS) {
+  const dev = ` ${t.devise}`;
+  const nuit = d.coef > 1 ? ` +${Math.round((d.coef - 1) * 100)} %` : '';
+  $('dPec').textContent = fmt(d.priseEnCharge) + dev;
+  $('lDist').textContent = `Distance : ${(distanceM / 1000).toFixed(2)} km × ${fmt(t.prixKm)}${nuit}`;
+  $('dDist').textContent = fmt(d.distancePart) + dev;
+  $('lAtt').textContent = `Attente : ${fmtTemps(attenteS)} × ${fmt(t.prixMinute)}/min${nuit}`;
+  $('dAtt').textContent = fmt(d.attentePart) + dev;
 }
 
 function boutons(etat) {
