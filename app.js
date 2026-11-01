@@ -117,6 +117,9 @@ function boutons(etat) {
   $('btnReset').hidden = etat !== 'terminee';
   $('btnRecu').hidden = !(etat === 'terminee' && course?.recId);
   $('btnReglages').disabled = etat === 'en_course' || etat === 'pause';
+  // Deux boutons : côte à côte. Un seul : toute la largeur.
+  const zone = document.querySelector('.actions');
+  zone.classList.toggle('seul', [...zone.children].filter((b) => !b.hidden).length === 1);
 }
 
 // ---- Suppléments pendant la course ----
