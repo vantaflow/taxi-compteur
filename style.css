@@ -84,7 +84,7 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 
 /* Boutons */
 .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: auto; }
-.actions #btnStart { grid-column: span 2; }
+.actions #btnStart, .actions #btnReset, .actions #btnRecu { grid-column: span 2; }
 .btn { font-size: 18px; font-weight: 700; height: 60px; padding: 0 12px; border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 8px;
   border: 1px solid var(--ligne); background: var(--panel); color: var(--texte); }
 .btn:active { transform: scale(.98); }
