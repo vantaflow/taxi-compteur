@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <script src="couleur.js?v=17"></script>
+  <script src="couleur.js?v=20"></script>
   <script>
     // Couleur du taxi choisie, appliquée avant l'affichage.
     try { TaxiCouleur.appliquer(TaxiCouleur.lire()); } catch (e) {}
@@ -27,7 +27,7 @@
     })();
   </script>
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="style.css?v=17">
+  <link rel="stylesheet" href="style.css?v=20">
 </head>
 <body>
   <main class="app">
@@ -124,9 +124,14 @@
     </form>
   </dialog>
 
-  <dialog id="styles">
-    <form method="dialog">
-      <div class="dlg-tete-simple"><h2>Style d'affichage</h2></div>
+  <dialog id="styles" class="dlg-fixe">
+    <form method="dialog" class="dlg">
+      <div class="dlg-tete">
+        <h2>Style et couleur</h2>
+        <button value="" class="icone" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      </div>
+      <div class="dlg-corps">
+      <h2>Style d'affichage</h2>
       <div class="choix">
         <button value="neon" class="carte-style">
           <span class="apercu" style="background:#07090c;color:var(--c-vif);font-family:'Share Tech Mono',monospace;border:1px solid #2a2f38">11.52</span>
@@ -145,7 +150,8 @@
       <p class="note">Couleur dominante de l'appli : le fond en « Couleur taxi », les chiffres et l'anneau dans les autres styles.</p>
       <div class="couleurs" id="couleurs"></div>
       <label class="autre-couleur">Autre couleur <input type="color" id="couleurPerso" value="#ffcc00"></label>
-      <div class="actions-dlg un"><button value="" class="btn">Fermer</button></div>
+      </div>
+      <div class="actions-dlg un dlg-pied"><button value="" class="btn">Fermer</button></div>
     </form>
   </dialog>
 
@@ -206,6 +212,6 @@
     </form>
   </dialog>
 
-  <script type="module" src="app.js?v=17"></script>
+  <script type="module" src="app.js?v=20"></script>
 </body>
 </html>
