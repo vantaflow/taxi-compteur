@@ -23,17 +23,18 @@
       document.documentElement.dataset.style = s;
     })();
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=Chakra+Petch:wght@500;600;700&family=Manrope:wght@500;600;700;800&family=Share+Tech+Mono&display=swap">
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
   <main class="app">
     <header class="top">
       <div class="badge" id="etat">LIBRE</div>
       <div class="badge nuit" id="badgeNuit" hidden>NUIT</div>
-      <button class="icone droite" id="btnTheme" aria-label="Choisir le style">
+      <button class="icone droite" id="btnHistorique" aria-label="Historique des courses">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.6-6.4"></path><path d="M3 4v4h4"></path><path d="M12 7v5l3 2"></path></svg>
+      </button>
+      <button class="icone" id="btnTheme" aria-label="Choisir le style">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-.5-.2-.8-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.7-1.6 1.6-1.6h1.9A4.9 4.9 0 0 0 21 10.5C21 6.4 17 3 12 3z"></path><circle cx="7.5" cy="11" r="1.2"></circle><circle cx="10" cy="7" r="1.2"></circle><circle cx="15" cy="7" r="1.2"></circle></svg>
       </button>
       <button class="icone" id="btnReglages" aria-label="Réglages">
@@ -53,6 +54,7 @@
     <div class="damier" aria-hidden="true"></div>
 
     <div class="panneau">
+    <label class="profil-choix" id="profilChoix"><span>Tarif</span><select id="selProfil"></select></label>
     <section class="stats">
       <div><span class="lbl">Distance</span><span class="val" id="distance">0.00 km</span></div>
       <div class="att"><span class="lbl">Attente</span><span class="val" id="attente">0:00</span></div>
@@ -68,16 +70,56 @@
 
     <div class="gps" id="gps">GPS : en attente</div>
 
+    <div class="supps" id="supps" aria-label="Ajouter un supplément"></div>
+
     <section class="actions">
       <button class="btn principal" id="btnStart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"></path></svg>Démarrer</button>
       <button class="btn secondaire" id="btnPause" hidden><svg viewBox="0 0 24 24" aria-hidden="true" id="icoPause"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg><span id="lblPause">Pause</span></button>
       <button class="btn fin" id="btnStop" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"></rect></svg>Terminer</button>
+      <button class="btn secondaire" id="btnRecu" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"></path></svg>Reçu</button>
       <button class="btn principal" id="btnReset" hidden>Nouvelle course</button>
     </section>
 
     <p class="aide" id="aideInstall" hidden></p>
     </div>
   </main>
+
+  <dialog id="historique" class="dlg-fixe">
+    <form method="dialog" class="dlg">
+      <div class="dlg-tete">
+        <h2>Historique</h2>
+        <button value="" class="icone" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      </div>
+      <div class="dlg-corps">
+        <div class="totaux" id="totaux"></div>
+        <ul class="liste-courses" id="listeCourses"></ul>
+        <p class="vide" id="histVide">Aucune course terminée pour l'instant.</p>
+      </div>
+      <div class="actions-dlg dlg-pied">
+        <button type="button" class="btn" id="btnExport">Exporter (Excel)</button>
+        <button type="button" class="btn texte-danger" id="btnViderHist">Tout effacer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="recu" class="dlg-fixe">
+    <form method="dialog" class="dlg">
+      <div class="dlg-tete">
+        <h2>Reçu</h2>
+        <button value="" class="icone" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      </div>
+      <div class="dlg-corps">
+        <img id="imgRecu" class="img-recu" alt="Reçu de la course">
+        <p class="note" style="text-align:center">Astuce : appui long sur l'image pour l'enregistrer dans vos photos. Le reçu est créé sur le téléphone, sans internet.</p>
+      </div>
+      <div class="dlg-pied pied-recu">
+        <button type="button" class="btn principal" id="btnPartagerImg">Partager l'image</button>
+        <button type="button" class="btn" id="btnPartagerTxt">Partager en texte</button>
+        <button type="button" class="btn" id="btnEnregistrerImg">Enregistrer l'image</button>
+        <button type="button" class="btn texte-danger" id="btnSupprCourse">Supprimer cette course</button>
+      </div>
+    </form>
+  </dialog>
 
   <dialog id="styles">
     <form method="dialog">
@@ -114,7 +156,13 @@
         <p>Quand le taxi roule, on compte la distance. À l'arrêt ou au ralenti, on compte le temps : jamais les deux en même temps.</p>
         <p class="exemple" id="aideExemple"></p>
       </div>
-      <h2>Tarifs</h2>
+      <h2>Tarif</h2>
+      <div class="profil-ligne">
+        <select id="selProfilReglage" aria-label="Tarif à modifier"></select>
+        <button type="button" class="btn petit" id="btnNouveauProfil">+ Nouveau</button>
+      </div>
+      <small class="aide-champ aide-seule">Enregistrez plusieurs tarifs (Ville, Interurbain, Aéroport…) et choisissez-le avant de démarrer. Pour un forfait à prix fixe : le prix dans « Prix du début », et 0 au km et à la minute.</small>
+      <label>Nom du tarif<input name="nom" type="text" maxlength="24"></label>
       <label>Prix du début (prise en charge)<input name="priseEnCharge" type="number" step="0.01" min="0" inputmode="decimal"><small class="aide-champ">Montant affiché dès l'appui sur Démarrer, avant d'avoir roulé.</small></label>
       <label>Prix par kilomètre<input name="prixKm" type="number" step="0.01" min="0" inputmode="decimal"><small class="aide-champ">Ajouté quand le taxi roule plus vite que la vitesse réglée plus bas.</small></label>
       <label>Prix par minute d'attente<input name="prixMinute" type="number" step="0.01" min="0" inputmode="decimal"><small class="aide-champ">Ajouté à l'arrêt ou au ralenti : feu rouge, bouchon, attente du client.</small></label>
@@ -130,6 +178,18 @@
         <label>Fin (heure)<input name="heureFinNuit" type="number" min="0" max="23" inputmode="numeric"></label>
       </div>
       <small class="aide-champ aide-seule">Exemple : de 20 h à 6 h. La plage peut passer minuit.</small>
+      <button type="button" class="btn petit texte-danger" id="btnSupprProfil">Supprimer ce tarif</button>
+
+      <h2>Suppléments</h2>
+      <small class="aide-champ aide-seule">Boutons affichés pendant la course pour ajouter un montant au prix : bagage, aéroport, péage… Laissez le montant vide pour le saisir à chaque fois (péage par exemple). Ils s'ajoutent après la course minimum et ne sont pas majorés la nuit.</small>
+      <div id="listeSupps" class="liste-supps"></div>
+      <button type="button" class="btn petit" id="btnAjoutSupp">+ Ajouter un supplément</button>
+
+      <h2>Reçu</h2>
+      <small class="aide-champ aide-seule">Ces informations apparaissent en haut du reçu. Toutes sont facultatives.</small>
+      <label>Nom du chauffeur<input name="recuChauffeur" type="text" maxlength="40" autocomplete="name"></label>
+      <label>Numéro du taxi ou plaque<input name="recuTaxi" type="text" maxlength="30"></label>
+      <label>Téléphone<input name="recuTelephone" type="tel" maxlength="20" autocomplete="tel"></label>
       <p class="note">Les nouveaux tarifs s'appliquent à la prochaine course.</p>
       </div>
       <div class="actions-dlg dlg-pied">
@@ -139,6 +199,6 @@
     </form>
   </dialog>
 
-  <script type="module" src="app.js?v=8"></script>
+  <script type="module" src="app.js?v=9"></script>
 </body>
 </html>

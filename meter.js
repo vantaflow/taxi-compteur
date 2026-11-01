@@ -55,6 +55,8 @@ export function nouvelleCourse(t, maintenant = Date.now()) {
     dernierTick: maintenant,
     nuit: t.nuitAuto ? estNuit(new Date(maintenant), t) : false,
     fin: null,
+    profil: t.nom || '',    // nom du tarif utilisé (Ville, Aéroport…)
+    supplements: [],        // [{nom, montant}] : bagage, péage…
   };
 }
 
@@ -127,8 +129,23 @@ export function detail(c, t) {
   const distancePart = (c.distance / 1000) * t.prixKm * coef;
   const attentePart = (attenteTotale(c) / 60) * t.prixMinute * coef;
   const brut = t.priseEnCharge + distancePart + attentePart;
-  const total = Math.max(brut, t.minimum || 0);
-  return { priseEnCharge: t.priseEnCharge, distancePart, attentePart, coef, total };
+  // Le minimum porte sur le compteur ; les suppléments s'ajoutent toujours en plus.
+  const compteur = Math.max(brut, t.minimum || 0);
+  const supplementsPart = (c.supplements || []).reduce((s, x) => s + (x.montant || 0), 0);
+  return { priseEnCharge: t.priseEnCharge, distancePart, attentePart, coef,
+    minimumApplique: brut < (t.minimum || 0), supplementsPart, total: compteur + supplementsPart };
+}
+
+export function ajouterSupplement(c, nom, montant) {
+  if (c.etat === 'terminee' || !(montant > 0)) return c;
+  (c.supplements ||= []).push({ nom, montant });
+  return c;
+}
+
+export function retirerSupplement(c, index) {
+  if (c.etat === 'terminee') return c;
+  c.supplements?.splice(index, 1);
+  return c;
 }
 
 export function pause(c, maintenant = Date.now()) {

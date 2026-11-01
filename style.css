@@ -84,7 +84,7 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 
 /* Boutons */
 .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: auto; }
-.actions .principal, #btnReset { grid-column: span 2; }
+.actions #btnStart { grid-column: span 2; }
 .btn { font-size: 18px; font-weight: 700; height: 60px; padding: 0 12px; border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 8px;
   border: 1px solid var(--ligne); background: var(--panel); color: var(--texte); }
 .btn:active { transform: scale(.98); }
@@ -186,8 +186,8 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 dialog { width: min(520px, calc(100% - 24px)); max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
   border: 1px solid var(--ligne); border-radius: 20px; background: var(--panel); color: var(--texte); padding: 18px; overflow: auto; }
 /* Réglages : en-tête et boutons toujours visibles, seuls les champs défilent */
-dialog#reglages { padding: 0; overflow: hidden; }
-dialog#reglages[open] { display: flex; flex-direction: column; }
+dialog#reglages, dialog.dlg-fixe { padding: 0; overflow: hidden; }
+dialog#reglages[open], dialog.dlg-fixe[open] { display: flex; flex-direction: column; }
 .dlg { display: flex; flex-direction: column; min-height: 0; flex: 1; }
 .dlg-tete { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 12px 8px 18px; border-bottom: 1px solid var(--ligne); }
 .dlg-tete h2 { margin: 0 auto 0 0; font-size: 18px; }
@@ -198,9 +198,9 @@ dialog::backdrop { background: rgba(0, 0, 0, .6); }
 dialog h2 { font-size: 16px; margin: 6px 0 12px; }
 dialog label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--doux); margin-bottom: 12px; }
 dialog label.ligne { flex-direction: row; align-items: center; color: var(--texte); }
-dialog input[type=number], dialog input[type=text] { font: inherit; font-size: 18px; padding: 10px 12px; border-radius: 10px;
+dialog input[type=number], dialog input[type=text], dialog input[type=tel] { font: inherit; font-size: 18px; padding: 10px 12px; border-radius: 10px;
   border: 1px solid var(--ligne); background: var(--bg); color: var(--texte); }
-:root[data-style="jaune"] dialog input[type=number], :root[data-style="jaune"] dialog input[type=text] { background: #fffbe6; color: #111; }
+:root[data-style="jaune"] dialog input[type=number], :root[data-style="jaune"] dialog input[type=text], :root[data-style="jaune"] dialog input[type=tel] { background: #fffbe6; color: #111; }
 dialog input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--accent); }
 .deux { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .note { font-size: 13px; color: var(--doux); }
@@ -225,3 +225,51 @@ dialog .btn { height: 52px; font-size: 16px; }
 .aide-bloc p { margin: 6px 0 0; }
 .aide-bloc .exemple { font-weight: 600; }
 .aide-btn[aria-expanded="true"] { color: var(--sur-accent); background: var(--accent); border-color: var(--accent); }
+
+/* ===== Tarif enregistré, suppléments ===== */
+.profil-choix { display: flex; align-items: center; gap: 10px; padding: 0 6px 0 14px; height: 48px; border-radius: var(--rayon);
+  border: 1px solid var(--ligne); background: var(--panel); color: var(--doux); font-size: 14px; font-weight: 600; }
+.profil-choix select { flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; color: var(--texte); font: inherit; font-size: 17px; font-weight: 700; text-align: right; }
+.profil-choix select option { color: #111; }
+.supps { display: flex; flex-wrap: wrap; gap: 8px; }
+.supps:empty { display: none; }
+.supp { height: 44px; padding: 0 14px; border-radius: 999px; border: 1px dashed var(--doux); background: transparent; color: var(--texte); font-size: 15px; font-weight: 600; }
+.supp:active { transform: scale(.97); }
+.detail .ligne-supp span:first-child { display: flex; align-items: center; gap: 6px; }
+.retirer { width: 32px; height: 32px; margin: -6px 0 -6px -6px; border: 0; border-radius: 50%; background: transparent; color: var(--doux); display: inline-flex; align-items: center; justify-content: center; }
+.retirer svg { width: 16px; height: 16px; }
+.btn.petit { height: 44px; font-size: 15px; padding: 0 14px; border-radius: 12px; }
+.btn.texte-danger { color: var(--danger); background: transparent; border-color: color-mix(in srgb, var(--danger) 40%, transparent); }
+dialog .btn.petit { height: 44px; font-size: 15px; }
+.profil-ligne { display: flex; gap: 8px; margin-bottom: 12px; }
+.profil-ligne select { flex: 1; min-width: 0; }
+dialog select { font: inherit; font-size: 17px; height: 46px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--ligne); background: var(--bg); color: var(--texte); }
+:root[data-style="jaune"] dialog select { background: #fffbe6; color: #111; }
+#btnSupprProfil { width: 100%; margin: 4px 0 8px; }
+.liste-supps { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.ligne-reglage-supp { display: grid; grid-template-columns: minmax(0, 1fr) 96px 44px; gap: 8px; }
+.ligne-reglage-supp input { min-width: 0; font: inherit; font-size: 16px; height: 46px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--ligne); background: var(--bg); color: var(--texte); }
+:root[data-style="jaune"] .ligne-reglage-supp input { background: #fffbe6; color: #111; }
+.ligne-reglage-supp .icone { width: 44px; height: 46px; }
+#btnAjoutSupp { width: 100%; margin-bottom: 8px; }
+
+/* ===== Historique ===== */
+.totaux { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 10px 0 14px; }
+.totaux > div { border: 1px solid var(--ligne); border-radius: 14px; padding: 10px; background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.totaux .lbl { font-size: 11px; }
+.totaux .somme { font-family: var(--chiffres); font-size: 20px; font-weight: 700; margin-top: 2px; white-space: nowrap; }
+.totaux .nb { font-size: 12px; color: var(--doux); }
+.liste-courses { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.liste-courses button { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; text-align: left;
+  padding: 10px 12px; border-radius: 12px; border: 1px solid var(--ligne); background: transparent; color: var(--texte); }
+.liste-courses .quand { font-weight: 700; font-size: 15px; }
+.liste-courses .quoi { grid-column: 1; font-size: 13px; color: var(--doux); }
+.liste-courses .combien { grid-row: 1 / span 2; grid-column: 2; align-self: center; font-family: var(--chiffres); font-size: 18px; font-weight: 700; }
+.liste-courses .jour { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--doux); margin: 10px 0 2px; }
+.vide { color: var(--doux); text-align: center; margin: 24px 0; }
+
+/* ===== Reçu ===== */
+.img-recu { display: block; width: 100%; max-width: 420px; margin: 10px auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0, 0, 0, .25); background: #fff; }
+.pied-recu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.pied-recu .principal, .pied-recu .texte-danger { grid-column: span 2; }
+.pied-recu .btn { height: 48px; font-size: 15px; }
