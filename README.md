@@ -53,7 +53,7 @@ Bouton palette en haut à droite, changeable à tout moment, même pendant une c
 - **Couleur taxi** : fond à la couleur du taxi, énorme prix, bande à damier ; très lisible en plein soleil.
 - **Épuré clair** : prix dans un anneau qui fait un tour par minute d'attente (ou par kilomètre en roulant).
 
-**Couleur du taxi** : au Maroc, chaque ville a la sienne ; aux États-Unis, les taxis sont jaunes. Dans la même fenêtre, on choisit la couleur dominante de l'appli : couleurs prêtes (jaune New York, rouge Casablanca et Fès, bleu Rabat, beige Marrakech, orange Agadir, turquoise Tanger, bleu ciel Meknès, vert) ou **n'importe quelle autre couleur**. Elle colore le fond en « Couleur taxi », les chiffres et l'anneau dans les autres styles, et le bandeau du reçu. Le texte passe automatiquement en noir ou en blanc, et la couleur est éclaircie ou assombrie si besoin, pour rester lisible.
+**Couleur du taxi** : au Maroc, chaque ville a la sienne ; aux États-Unis, les taxis sont jaunes. Dans la même fenêtre, on choisit la couleur dominante de l'appli : couleurs des petits taxis par ville, d'après [Wikipédia](https://fr.wikipedia.org/wiki/Taxi_au_Maroc) (jaune : New York, Salé, Tétouan ; rouge : Casablanca, Fès, Oujda ; bleu : Rabat, Essaouira ; bleu ciel : Meknès, Taza, Tanger ; ocre : Marrakech ; orange : Agadir, Berkane ; vert : Mohammédia, Ifrane, Témara ; blanc : El Jadida, Kénitra, Safi ; rose : Kelaat M'Gouna), ou **n'importe quelle autre couleur**. Elle colore le fond en « Couleur taxi », les chiffres et l'anneau dans les autres styles, et le bandeau du reçu. Le texte passe automatiquement en noir ou en blanc, et la couleur est éclaircie ou assombrie si besoin, pour rester lisible.
 
 ## Comment le prix est calculé
 

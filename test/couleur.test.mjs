@@ -17,6 +17,7 @@ test('toutes les couleurs proposées restent lisibles partout', () => {
     assert.ok(TC.contraste(v['--c'], v['--c-sur']) >= 4.5, `${nom} : texte sur la couleur`);
     assert.ok(TC.contraste(v['--c-vif'], '#07090c') >= 4.5, `${nom} : chiffres du style Néon`);
     assert.ok(TC.contraste(v['--c-fonce'], '#ffffff') >= 5, `${nom} : texte du style Épuré`);
+    assert.ok(TC.contraste(v['--c-anneau'], '#e6e6e1') >= 1.6, `${nom} : anneau du style Épuré`);
   }
 });
 

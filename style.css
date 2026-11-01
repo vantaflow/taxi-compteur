@@ -22,7 +22,7 @@
 }
 :root[data-style="epure"] {
   --bg: #f6f6f3; --texte: #15171a; --doux: #5d636b; --panel: #ffffff; --ligne: #ececE7;
-  --c: #f2b705; --c-sur: #111111; --c-vif: #f2b705; --c-fonce: #7a5200;
+  --c: #f2b705; --c-sur: #111111; --c-vif: #f2b705; --c-fonce: #7a5200; --c-anneau: #f2b705;
   --accent: var(--c); --sur-accent: var(--c-sur); --ok: #15803d; --danger: #c62828; --bleu: #1d4ed8;
   --police: 'Manrope', system-ui, sans-serif;
   --chiffres: 'Manrope', system-ui, sans-serif;
@@ -147,7 +147,7 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 :root[data-style="epure"] .badge { box-shadow: 0 1px 2px rgba(0, 0, 0, .05); border-color: transparent; }
 :root[data-style="epure"] .badge.course::before { box-shadow: none; }
 :root[data-style="epure"] .ecran { --tour: 0; align-self: center; width: min(286px, 76vw); aspect-ratio: 1; border-radius: 50%; padding: 12px; border: 0;
-  background: conic-gradient(var(--accent) calc(var(--tour) * 360deg), #e6e6e1 0); }
+  background: conic-gradient(var(--c-anneau) calc(var(--tour) * 360deg), #e6e6e1 0); }
 :root[data-style="epure"] .ecran-int { height: 100%; border-radius: 50%; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center; }
 :root[data-style="epure"] .etiquette { letter-spacing: 0; text-transform: none; font-size: 14px; }
 :root[data-style="epure"] .prix { flex-direction: column; align-items: center; gap: 0; margin-top: 2px; }
