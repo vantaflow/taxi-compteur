@@ -1,4 +1,4 @@
-const CACHE = 'taxi-v20';
+const CACHE = 'taxi-v21';
 // Tout ce qu'il faut pour fonctionner sans internet, polices comprises.
 const FICHIERS = ['./', 'index.html', 'style.css', 'app.js', 'meter.js', 'donnees.js', 'recu.js', 'couleur.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',

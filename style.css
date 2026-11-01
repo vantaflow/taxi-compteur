@@ -249,10 +249,15 @@ dialog .btn { height: 52px; font-size: 16px; }
 .btn.petit { height: 44px; font-size: 15px; padding: 0 14px; border-radius: 12px; }
 .btn.texte-danger { color: var(--danger); background: transparent; border-color: color-mix(in srgb, var(--danger) 40%, transparent); }
 dialog .btn.petit { height: 44px; font-size: 15px; }
-.profil-ligne { display: flex; gap: 8px; margin-bottom: 12px; }
+.profil-ligne { display: flex; align-items: stretch; gap: 8px; margin-bottom: 12px; }
 .profil-ligne select { flex: 1; min-width: 0; }
-dialog select { font: inherit; font-size: 17px; height: 46px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--ligne); background: var(--bg); color: var(--texte); }
-:root[data-style="jaune"] dialog select { background: #f6f6f2; color: #111; }
+.profil-ligne select, dialog .profil-ligne .btn.petit { height: 48px; margin: 0; }
+.profil-ligne .btn { flex: none; }
+/* Listes déroulantes : apparence maison (iOS ignore sinon la hauteur) avec une flèche */
+dialog select { font: inherit; font-size: 17px; height: 48px; padding: 0 36px 0 12px; border-radius: 10px; border: 1px solid var(--ligne);
+  color: var(--texte); -webkit-appearance: none; appearance: none;
+  background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23888' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center; }
+:root[data-style="jaune"] dialog select { background-color: #f6f6f2; color: #111; }
 #btnSupprProfil { width: 100%; margin: 4px 0 8px; }
 .liste-supps { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
 .ligne-reglage-supp { display: grid; grid-template-columns: minmax(0, 1fr) 96px 44px; gap: 8px; }
