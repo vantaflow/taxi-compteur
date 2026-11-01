@@ -190,7 +190,7 @@ dialog#reglages { padding: 0; overflow: hidden; }
 dialog#reglages[open] { display: flex; flex-direction: column; }
 .dlg { display: flex; flex-direction: column; min-height: 0; flex: 1; }
 .dlg-tete { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 12px 8px 18px; border-bottom: 1px solid var(--ligne); }
-.dlg-tete h2 { margin: 0; font-size: 18px; }
+.dlg-tete h2 { margin: 0 auto 0 0; font-size: 18px; }
 .dlg-corps { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 8px 18px 4px; }
 .dlg-pied { padding: 12px 18px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--ligne); background: inherit; }
 :root[data-style="jaune"] dialog { background: #fff; color: #111; }
@@ -214,3 +214,14 @@ dialog .btn { height: 52px; font-size: 16px; }
 .apercu { height: 64px; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-size: 18px; }
 .nom { font-weight: 700; font-size: 14px; }
 .desc { font-size: 12px; color: var(--doux); }
+
+/* Aide des réglages (bouton ?) */
+.aide-champ, .aide-bloc { display: none; }
+.avec-aide .aide-champ { display: block; font-size: 13px; line-height: 1.35; color: var(--doux); margin-top: -2px; }
+.avec-aide .aide-seule { margin: -6px 0 12px; }
+.avec-aide .aide-bloc { display: block; margin: 8px 0 6px; padding: 12px 14px; border-radius: 14px; font-size: 14px; line-height: 1.4;
+  background: color-mix(in srgb, var(--accent) 12%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+:root[data-style="jaune"] .avec-aide .aide-bloc { background: #fff6cc; border-color: #e6c200; }
+.aide-bloc p { margin: 6px 0 0; }
+.aide-bloc .exemple { font-weight: 600; }
+.aide-btn[aria-expanded="true"] { color: var(--sur-accent); background: var(--accent); border-color: var(--accent); }

@@ -167,6 +167,33 @@ dlgStyles.addEventListener('close', () => {
 
 // Réglages
 const dlg = $('reglages'), form = $('formReglages');
+// Aide des réglages : explications sous chaque champ et exemple calculé en direct.
+const CLE_AIDE = 'taxi.aide';
+function afficherAide(oui) {
+  form.classList.toggle('avec-aide', oui);
+  $('btnAide').setAttribute('aria-expanded', String(oui));
+  $('btnAide').setAttribute('aria-label', oui ? "Masquer l'aide" : "Afficher l'aide");
+}
+function exempleAide() {
+  const v = (k) => { const n = parseFloat(String(form.elements[k].value).replace(',', '.')); return Number.isFinite(n) ? n : 0; };
+  const dev = form.elements.devise.value.trim() || 'DH';
+  const f = (n) => n.toFixed(2).replace('.', ',');
+  const pec = v('priseEnCharge'), km = v('prixKm'), mn = v('prixMinute'), maj = 1 + v('majorationNuit') / 100;
+  const jour = Math.max(pec + 5 * km + 4 * mn, v('minimum'));
+  const nuit = Math.max(pec + (5 * km + 4 * mn) * maj, v('minimum'));
+  $('aideExemple').textContent = `Exemple : 5 km et 4 min d'attente = ${f(pec)} + 5 × ${f(km)} + 4 × ${f(mn)} = ${f(jour)} ${dev}` +
+    (maj > 1 ? ` (de nuit : ${f(nuit)} ${dev})` : '') + '.';
+}
+$('btnAide').onclick = () => {
+  const oui = !form.classList.contains('avec-aide');
+  afficherAide(oui); exempleAide();
+  try { localStorage.setItem(CLE_AIDE, oui ? '1' : '0'); } catch { /* indisponible */ }
+};
+form.addEventListener('input', exempleAide);
+let aideVue = '1';
+try { aideVue = localStorage.getItem(CLE_AIDE) ?? '1'; } catch { /* indisponible */ }
+afficherAide(aideVue === '1');
+
 // Toucher à côté d'une fenêtre la ferme sans rien changer.
 for (const d of document.querySelectorAll('dialog')) {
   d.addEventListener('click', (e) => { if (e.target === d) d.close(''); });
@@ -176,6 +203,7 @@ $('btnReglages').onclick = () => {
     const el = form.elements[k]; if (!el) continue;
     if (el.type === 'checkbox') el.checked = !!v; else el.value = v;
   }
+  exempleAide();
   dlg.showModal();
 };
 dlg.addEventListener('close', () => {

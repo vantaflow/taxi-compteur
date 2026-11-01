@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=Chakra+Petch:wght@500;600;700&family=Manrope:wght@500;600;700;800&family=Share+Tech+Mono&display=swap">
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
   <main class="app">
@@ -104,23 +104,32 @@
     <form method="dialog" id="formReglages" class="dlg">
       <div class="dlg-tete">
         <h2>Réglages</h2>
+        <button type="button" class="icone aide-btn" id="btnAide" aria-label="Afficher l'aide" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9.3a2.6 2.6 0 0 1 5 .9c0 1.7-2.5 2.3-2.5 3.8"></path><path d="M12 17.2v.1"></path></svg></button>
         <button value="annuler" class="icone" aria-label="Fermer sans enregistrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
       </div>
       <div class="dlg-corps">
+      <div class="aide-bloc">
+        <strong>Comment le prix est calculé</strong>
+        <p>Prix = prix du début + kilomètres parcourus × prix par km + minutes d'attente × prix par minute.</p>
+        <p>Quand le taxi roule, on compte la distance. À l'arrêt ou au ralenti, on compte le temps : jamais les deux en même temps.</p>
+        <p class="exemple" id="aideExemple"></p>
+      </div>
       <h2>Tarifs</h2>
-      <label>Prix du début (prise en charge)<input name="priseEnCharge" type="number" step="0.01" min="0" inputmode="decimal"></label>
-      <label>Prix par kilomètre<input name="prixKm" type="number" step="0.01" min="0" inputmode="decimal"></label>
-      <label>Prix par minute d'attente<input name="prixMinute" type="number" step="0.01" min="0" inputmode="decimal"></label>
-      <label>Vitesse en dessous de laquelle on compte l'attente (km/h)<input name="vitesseSeuil" type="number" step="1" min="1" inputmode="numeric"></label>
-      <label>Course minimum (0 = aucune)<input name="minimum" type="number" step="0.01" min="0" inputmode="decimal"></label>
-      <label>Devise<input name="devise" type="text" maxlength="5"></label>
+      <label>Prix du début (prise en charge)<input name="priseEnCharge" type="number" step="0.01" min="0" inputmode="decimal"><small class="aide-champ">Montant affiché dès l'appui sur Démarrer, avant d'avoir roulé.</small></label>
+      <label>Prix par kilomètre<input name="prixKm" type="number" step="0.01" min="0" inputmode="decimal"><small class="aide-champ">Ajouté quand le taxi roule plus vite que la vitesse réglée plus bas.</small></label>
+      <label>Prix par minute d'attente<input name="prixMinute" type="number" step="0.01" min="0" inputmode="decimal"><small class="aide-champ">Ajouté à l'arrêt ou au ralenti : feu rouge, bouchon, attente du client.</small></label>
+      <label>Vitesse en dessous de laquelle on compte l'attente (km/h)<input name="vitesseSeuil" type="number" step="1" min="1" inputmode="numeric"><small class="aide-champ">Au-dessus, on paie la distance ; en dessous, le temps. 10 km/h convient en ville.</small></label>
+      <label>Course minimum (0 = aucune)<input name="minimum" type="number" step="0.01" min="0" inputmode="decimal"><small class="aide-champ">Si la course coûte moins, le client paie ce montant. 0 = pas de minimum.</small></label>
+      <label>Devise<input name="devise" type="text" maxlength="5"><small class="aide-champ">Texte affiché après le prix : DH, €, TND…</small></label>
       <h2>Tarif de nuit</h2>
       <label class="ligne"><input name="nuitAuto" type="checkbox"> Activer automatiquement la nuit</label>
-      <label>Majoration de nuit (%)<input name="majorationNuit" type="number" step="1" min="0" inputmode="numeric"></label>
+      <small class="aide-champ aide-seule">Si la course démarre dans la plage horaire ci-dessous, le tarif de nuit s'applique à toute la course.</small>
+      <label>Majoration de nuit (%)<input name="majorationNuit" type="number" step="1" min="0" inputmode="numeric"><small class="aide-champ">Augmente le prix au km et à la minute, pas le prix du début. 50 % : 2,50 devient 3,75.</small></label>
       <div class="deux">
         <label>Début (heure)<input name="heureDebutNuit" type="number" min="0" max="23" inputmode="numeric"></label>
         <label>Fin (heure)<input name="heureFinNuit" type="number" min="0" max="23" inputmode="numeric"></label>
       </div>
+      <small class="aide-champ aide-seule">Exemple : de 20 h à 6 h. La plage peut passer minuit.</small>
       <p class="note">Les nouveaux tarifs s'appliquent à la prochaine course.</p>
       </div>
       <div class="actions-dlg dlg-pied">
@@ -130,6 +139,6 @@
     </form>
   </dialog>
 
-  <script type="module" src="app.js?v=7"></script>
+  <script type="module" src="app.js?v=8"></script>
 </body>
 </html>
