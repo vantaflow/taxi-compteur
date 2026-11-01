@@ -13,26 +13,49 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <script>try{const t=localStorage.getItem("taxi.theme");if(t)document.documentElement.dataset.theme=t}catch{}</script>
-  <link rel="stylesheet" href="style.css?v=5">
+  <script>
+    // Style choisi (néon, jaune, épuré), appliqué avant l'affichage pour éviter un flash.
+    (function () {
+      var s = null;
+      try { s = localStorage.getItem('taxi.style'); var t = localStorage.getItem('taxi.theme');
+        if (!s && t) s = t === 'light' ? 'jaune' : 'neon'; } catch (e) {}
+      if (!s) s = matchMedia('(prefers-color-scheme: light)').matches ? 'epure' : 'neon';
+      document.documentElement.dataset.style = s;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=Chakra+Petch:wght@500;600;700&family=Manrope:wght@500;600;700;800&family=Share+Tech+Mono&display=swap">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
   <main class="app">
     <header class="top">
       <div class="badge" id="etat">LIBRE</div>
       <div class="badge nuit" id="badgeNuit" hidden>NUIT</div>
-      <button class="icone droite" id="btnTheme" aria-label="Thème">◐</button>
-      <button class="icone" id="btnReglages" aria-label="Réglages">⚙︎</button>
+      <button class="icone droite" id="btnTheme" aria-label="Choisir le style">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-.5-.2-.8-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.7-1.6 1.6-1.6h1.9A4.9 4.9 0 0 0 21 10.5C21 6.4 17 3 12 3z"></path><circle cx="7.5" cy="11" r="1.2"></circle><circle cx="10" cy="7" r="1.2"></circle><circle cx="15" cy="7" r="1.2"></circle></svg>
+      </button>
+      <button class="icone" id="btnReglages" aria-label="Réglages">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>
+      </button>
     </header>
 
     <section class="ecran" aria-live="polite">
-      <div class="prix"><span id="total">0.00</span><span class="devise" id="devise">DH</span></div>
-      <div class="mode" id="mode">Appuyez sur Démarrer</div>
+      <div class="ecran-int">
+        <div class="etiquette">Montant</div>
+        <div class="prix"><span class="chiffres"><span class="fantome" id="fantome" aria-hidden="true">8.88</span><span id="total">0.00</span></span><span class="devise" id="devise">DH</span></div>
+        <div class="mode" id="mode">Appuyez sur Démarrer</div>
+        <div class="barre" aria-hidden="true"><i id="bDeb"></i><i id="bDist"></i><i id="bAtt"></i></div>
+      </div>
     </section>
 
+    <div class="damier" aria-hidden="true"></div>
+
+    <div class="panneau">
     <section class="stats">
       <div><span class="lbl">Distance</span><span class="val" id="distance">0.00 km</span></div>
-      <div><span class="lbl">Attente</span><span class="val" id="attente">0:00</span></div>
+      <div class="att"><span class="lbl">Attente</span><span class="val" id="attente">0:00</span></div>
       <div><span class="lbl">Durée</span><span class="val" id="duree">0:00</span></div>
       <div><span class="lbl">Vitesse</span><span class="val" id="vitesse">0 km/h</span></div>
     </section>
@@ -46,14 +69,36 @@
     <div class="gps" id="gps">GPS : en attente</div>
 
     <section class="actions">
-      <button class="btn principal" id="btnStart">Démarrer</button>
-      <button class="btn" id="btnPause" hidden>Pause</button>
-      <button class="btn danger" id="btnStop" hidden>Terminer</button>
-      <button class="btn" id="btnReset" hidden>Nouvelle course</button>
+      <button class="btn principal" id="btnStart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"></path></svg>Démarrer</button>
+      <button class="btn secondaire" id="btnPause" hidden><svg viewBox="0 0 24 24" aria-hidden="true" id="icoPause"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg><span id="lblPause">Pause</span></button>
+      <button class="btn fin" id="btnStop" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"></rect></svg>Terminer</button>
+      <button class="btn principal" id="btnReset" hidden>Nouvelle course</button>
     </section>
 
     <p class="aide" id="aideInstall" hidden></p>
+    </div>
   </main>
+
+  <dialog id="styles">
+    <form method="dialog">
+      <h2>Style d'affichage</h2>
+      <div class="choix">
+        <button value="neon" class="carte-style">
+          <span class="apercu" style="background:#07090c;color:#ffb020;font-family:'Share Tech Mono',monospace;border:1px solid #2a2111">11.52</span>
+          <span class="nom">Néon nuit</span><span class="desc">Sombre, chiffres lumineux</span>
+        </button>
+        <button value="jaune" class="carte-style">
+          <span class="apercu" style="background:#ffcc00;color:#111;font-family:'Archivo Black',sans-serif">11.52</span>
+          <span class="nom">Jaune taxi</span><span class="desc">Contrasté, lisible au soleil</span>
+        </button>
+        <button value="epure" class="carte-style">
+          <span class="apercu" style="background:#f6f6f3;color:#15171a;font-family:Manrope,sans-serif;font-weight:800;box-shadow:inset 0 0 0 5px #f2b705;border-radius:50%;width:64px;justify-self:center">11.52</span>
+          <span class="nom">Épuré clair</span><span class="desc">Clair, anneau d'attente</span>
+        </button>
+      </div>
+      <div class="actions-dlg un"><button value="" class="btn">Fermer</button></div>
+    </form>
+  </dialog>
 
   <dialog id="reglages">
     <form method="dialog" id="formReglages">
@@ -79,6 +124,6 @@
     </form>
   </dialog>
 
-  <script type="module" src="app.js?v=5"></script>
+  <script type="module" src="app.js?v=6"></script>
 </body>
 </html>

@@ -63,6 +63,22 @@ function rendu() {
     boutons(course.etat);
   }
   const g = $('gps'); g.textContent = gpsMsg.txt; g.className = `gps ${gpsMsg.cls}`;
+  visuels();
+}
+
+// Néon : « 8 » éteints derrière le prix ; barre début/distance/attente.
+// Épuré : l'anneau fait un tour par minute d'attente (ou par km en roulant).
+function visuels() {
+  $('fantome').textContent = $('total').textContent.replace(/\d/g, '8');
+  const t = course ? tarifsCourse : tarifs;
+  const d = course ? detail(course, t) : { priseEnCharge: t.priseEnCharge, distancePart: 0, attentePart: 0 };
+  $('bDeb').style.flexGrow = d.priseEnCharge || 0.0001;
+  $('bDist').style.flexGrow = d.distancePart;
+  $('bAtt').style.flexGrow = d.attentePart;
+  let tour = 0;
+  if (course && course.etat !== 'terminee') tour = course.enMouvement ? (course.distance % 1000) / 1000 : (attenteTotale(course) % 60) / 60;
+  if (course?.etat === 'terminee') tour = 1;
+  document.querySelector('.ecran').style.setProperty('--tour', tour.toFixed(3));
 }
 
 // Détail du prix : chaque ligne montre sa base (km, temps) et son montant en devise.
@@ -79,7 +95,8 @@ function lignesDetail(t, d, distanceM, attenteS) {
 function boutons(etat) {
   $('btnStart').hidden = etat !== 'libre';
   $('btnPause').hidden = !(etat === 'en_course' || etat === 'pause');
-  $('btnPause').textContent = etat === 'pause' ? 'Reprendre' : 'Pause';
+  $('lblPause').textContent = etat === 'pause' ? 'Reprendre' : 'Pause';
+  $('icoPause').innerHTML = etat === 'pause' ? '<path d="M8 5.5v13l10.5-6.5z"></path>' : '<rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect>';
   $('btnStop').hidden = !(etat === 'en_course' || etat === 'pause');
   $('btnReset').hidden = etat !== 'terminee';
   $('btnReglages').disabled = etat === 'en_course' || etat === 'pause';
@@ -131,26 +148,22 @@ $('btnStop').onclick = () => {
 };
 $('btnReset').onclick = () => { course = null; tarifsCourse = tarifs; sauver(); rendu(); };
 
-// Thème : Auto (suit le téléphone) → Clair → Sombre
-const THEMES = [null, 'light', 'dark'];
-const NOMS_THEME = { null: 'Thème automatique', light: 'Thème clair', dark: 'Thème sombre' };
-function appliquerTheme(th) {
-  if (th) document.documentElement.dataset.theme = th; else delete document.documentElement.dataset.theme;
-  const clair = th === 'light' || (!th && matchMedia('(prefers-color-scheme: light)').matches);
-  document.querySelector('meta[name="theme-color"]').content = clair ? '#f2f3f5' : '#0b0d10';
-  $('btnTheme').textContent = th === 'light' ? '☀︎' : th === 'dark' ? '☾' : '◐';
-  $('btnTheme').title = NOMS_THEME[th];
+// Style d'affichage : Néon nuit, Jaune taxi, Épuré clair
+const COULEUR_BARRE = { neon: '#07090c', jaune: '#ffcc00', epure: '#f6f6f3' };
+function appliquerStyle(s) {
+  document.documentElement.dataset.style = s;
+  document.querySelector('meta[name="theme-color"]').content = COULEUR_BARRE[s] || '#07090c';
+  document.querySelectorAll('.carte-style').forEach((b) => b.setAttribute('aria-pressed', String(b.value === s)));
 }
-let theme = document.documentElement.dataset.theme || null;
-appliquerTheme(theme);
-matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => appliquerTheme(theme));
-$('btnTheme').onclick = () => {
-  theme = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
-  try { theme ? localStorage.setItem('taxi.theme', theme) : localStorage.removeItem('taxi.theme'); } catch { /* indisponible */ }
-  appliquerTheme(theme);
-  gpsMsg = { ...gpsMsg }; const g = $('gps'), ancien = g.textContent;
-  g.textContent = NOMS_THEME[theme]; setTimeout(() => { if (g.textContent === NOMS_THEME[theme]) g.textContent = ancien; }, 1500);
-};
+appliquerStyle(document.documentElement.dataset.style || 'neon');
+const dlgStyles = $('styles');
+$('btnTheme').onclick = () => dlgStyles.showModal();
+dlgStyles.addEventListener('close', () => {
+  const s = dlgStyles.returnValue;
+  if (!COULEUR_BARRE[s]) return;
+  try { localStorage.setItem('taxi.style', s); localStorage.removeItem('taxi.theme'); } catch { /* indisponible */ }
+  appliquerStyle(s); rendu();
+});
 
 // Réglages
 const dlg = $('reglages'), form = $('formReglages');
