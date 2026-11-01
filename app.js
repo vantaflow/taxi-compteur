@@ -4,6 +4,7 @@ import { CLES, SUPPLEMENTS_DEFAUT, RECU_DEFAUT, lire, ecrire, nouvelId, chargerP
   enregistrement, ajouterAuHistorique, supprimerDuHistorique, totaux, csv, fmtDate, fmtHeure, fmtArgent, numeroRecu } from './donnees.js';
 import { canvasRecu, texteRecu, blobRecu } from './recu.js';
 
+const VERSION = 23; // à incrémenter avec CACHE (sw.js) et ?v= (index.html)
 const $ = (id) => document.getElementById(id);
 const store = (() => { try { return window.localStorage; } catch { return { getItem: () => null, setItem() {}, removeItem() {} }; } })();
 const CLE_COURSE = 'taxi.course';
@@ -367,12 +368,14 @@ marquerCouleur();
 appliquerStyle(document.documentElement.dataset.style || 'neon');
 const dlgStyles = $('styles');
 $('btnTheme').onclick = () => { marquerCouleur(); dlgStyles.showModal(); };
-dlgStyles.addEventListener('close', () => {
-  const s = dlgStyles.returnValue;
-  if (!Object.hasOwn(COULEUR_BARRE, s)) return;
+// Choix appliqué dès le toucher de la carte, sans attendre la fermeture de la fenêtre.
+document.querySelectorAll('.carte-style').forEach((b) => b.addEventListener('click', () => {
+  const s = b.value;
   try { localStorage.setItem('taxi.style', s); localStorage.removeItem('taxi.theme'); } catch { /* indisponible */ }
   appliquerStyle(s); rendu();
-});
+  dlgStyles.close();
+}));
+$('version').textContent = 'Version ' + VERSION;
 
 // ================= Réglages =================
 const dlg = $('reglages'), form = $('formReglages');

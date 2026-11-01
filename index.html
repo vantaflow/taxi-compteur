@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <script src="couleur.js?v=22"></script>
+  <script src="couleur.js?v=23"></script>
   <script>
     // Couleur du taxi choisie, appliquée avant l'affichage.
     try { TaxiCouleur.appliquer(TaxiCouleur.lire()); } catch (e) {}
@@ -27,7 +27,7 @@
     })();
   </script>
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="style.css?v=22">
+  <link rel="stylesheet" href="style.css?v=23">
 </head>
 <body>
   <main class="app">
@@ -133,15 +133,15 @@
       <div class="dlg-corps">
       <h2>Style d'affichage</h2>
       <div class="choix">
-        <button value="neon" class="carte-style">
+        <button type="button" value="neon" class="carte-style">
           <span class="apercu" style="background:#07090c;color:var(--c-vif);font-family:'Share Tech Mono',monospace;border:1px solid #2a2f38">11.52</span>
           <span class="nom">Néon nuit</span><span class="desc">Sombre, chiffres lumineux</span>
         </button>
-        <button value="jaune" class="carte-style">
+        <button type="button" value="jaune" class="carte-style">
           <span class="apercu" style="background:var(--c);color:var(--c-sur);font-family:'Archivo Black',sans-serif">11.52</span>
           <span class="nom">Couleur taxi</span><span class="desc">Fond à la couleur du taxi</span>
         </button>
-        <button value="epure" class="carte-style">
+        <button type="button" value="epure" class="carte-style">
           <span class="apercu" style="background:#f6f6f3;color:#15171a;font-family:Manrope,sans-serif;font-weight:800;box-shadow:inset 0 0 0 5px var(--c);border-radius:50%;width:64px;justify-self:center">11.52</span>
           <span class="nom">Épuré clair</span><span class="desc">Clair, anneau d'attente</span>
         </button>
@@ -151,7 +151,7 @@
       <div class="couleurs" id="couleurs"></div>
       <label class="autre-couleur">Autre couleur <input type="color" id="couleurPerso" value="#ffcc00"></label>
       </div>
-      <div class="actions-dlg un dlg-pied"><button value="" class="btn">Fermer</button></div>
+      <div class="actions-dlg un dlg-pied"><button value="" class="btn">Fermer</button><p class="note version" id="version"></p></div>
     </form>
   </dialog>
 
@@ -212,6 +212,6 @@
     </form>
   </dialog>
 
-  <script type="module" src="app.js?v=22"></script>
+  <script type="module" src="app.js?v=23"></script>
 </body>
 </html>

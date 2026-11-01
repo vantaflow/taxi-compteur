@@ -310,3 +310,5 @@ dialog select { font: inherit; font-size: 17px; height: 48px; padding: 0 36px 0 
   }
   dialog#reglages .dlg-tete, dialog.dlg-fixe .dlg-tete { padding-top: 12px; }
 }
+
+.version { text-align: center; margin: 6px 0 0; font-size: 12px; }

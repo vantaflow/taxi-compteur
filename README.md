@@ -166,7 +166,8 @@ Le site est servi par **GitHub Pages** depuis la branche `main` (racine du dép�
 
 1. incrémenter `CACHE` dans `sw.js` (`taxi-vN`) ;
 2. incrémenter le paramètre `?v=N` de `couleur.js`, `style.css` et `app.js` dans `index.html` ;
-3. ajouter tout nouveau fichier à la liste `FICHIERS` de `sw.js`, sinon il ne sera pas disponible hors ligne.
+3. incrémenter `VERSION` en haut de `app.js` (affichée dans la fenêtre « Style et couleur ») ;
+4. ajouter tout nouveau fichier à la liste `FICHIERS` de `sw.js`, sinon il ne sera pas disponible hors ligne.
 
 ### Données stockées (localStorage)
 
